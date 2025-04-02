@@ -48,9 +48,16 @@ public class DragDropCarComponentsUI : MonoBehaviour
                 if (carComponent.GetComponent<CarComponentCellUI>().IsMouseEntered)
                 {
                     _spawnCarComponents.Spawn(carComponent.GetComponent<CarComponentCellUI>());
+                    _carComponentImage.DestroyCellImage();
+                    _carComponentCells.DestroyCell(carComponent);
                     Debug.Log($"The {_carComponentImage.CarComponentImage} is assembled!");
                     _carComponentImage = null;
                     break;
+                }
+                else
+                {
+                    _carComponentImage.ReturnToStartPosition();
+
                 }
             }
         }

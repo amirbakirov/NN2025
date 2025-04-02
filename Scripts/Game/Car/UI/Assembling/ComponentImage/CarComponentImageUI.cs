@@ -5,19 +5,17 @@ using UnityEngine.EventSystems;
 public class CarComponentImageUI : MonoBehaviour
 {
     private DragDropCarComponentsUI _dragDropCarComponentsUI;
-
+    private Vector3 _spawnPosition = Vector3.zero;
     private CarComponent _carComponentImage;
     public CarComponent CarComponentImage => _carComponentImage;
 
-    private void Start()
-    {
-        Initialize(CarComponent.Wheels);
-    }
-    public void Initialize(CarComponent carComponentImage)
+    public void Initialize(CarComponent carComponentImage, GameObject componentVisual)
     {
         _dragDropCarComponentsUI = FindAnyObjectByType<DragDropCarComponentsUI>();
 
         _carComponentImage = carComponentImage;
+
+        Instantiate(componentVisual, transform);
 
         EventTrigger eventTrigger = GetComponent<EventTrigger>();
 
@@ -35,5 +33,17 @@ public class CarComponentImageUI : MonoBehaviour
         entry.eventID = EventTriggerType.EndDrag;
         entry.callback.AddListener((eventData) => _dragDropCarComponentsUI.OnDragEnd());
         eventTrigger.triggers.Add(entry);
+
+        _spawnPosition = GetComponent<RectTransform>().anchoredPosition;
+    }
+
+    public void ReturnToStartPosition()
+    {
+        GetComponent<RectTransform>().anchoredPosition = _spawnPosition;
+    }
+
+    public void DestroyCellImage()
+    {
+        Destroy(gameObject);
     }
 }
